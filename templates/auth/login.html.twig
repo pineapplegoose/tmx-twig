@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}Login
+{% endblock %}
+{% block body %}
+	<div class="max-w-md h-[70vh] text-white flex flex-col justify-center mx-auto py-12">
+		<h2 class="text-2xl font-bold mb-6  text-center">Login</h2>
+		<form method="post" action="/auth/login" class="space-y-4">
+			<div>
+				<label class="block text-sm font-medium">Email</label>
+				<input name="email" type="email" required class="mt-1 block w-full bg-[#80008051] rounded-md border-2 border-white p-2"/>
+			</div>
+			<div>
+				<label class="block text-sm font-medium">Password</label>
+				<input name="password" type="password" required class="mt-1 block w-full bg-[#80008051] rounded-md border-2 border-white p-2"/>
+				<button type="button" onclick="alert('Try user@example.com / password')" class="text-sm text-slate-100">Hint</button>
+			</div>
+
+			<div class="flex items-center justify-between">
+				<button type="submit" class="px-4 py-2 bg-[#800080] text-white rounded-md">Login</button>
+				<button type="button" class="text-sm text-slate-100">Are you new here?
+					<a href="/auth/signup">Sign up here</a>
+				</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}

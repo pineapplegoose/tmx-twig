@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ticket Form
+{% endblock %}
+
+{% block body %}
+	<div class="max-w-2xl mx-auto py-8">
+		<div class="p-6">
+			<h3 class="text-lg text-white font-semibold mb-4">{{ ticket is defined ? 'Edit ticket' : 'Create ticket' }}</h3>
+
+			<form method="post" action="{{ action }}" class="text-white space-y-4">
+				<div>
+					<label class="block text-sm font-medium mb-1">Title</label>
+					<input name="title" value="{{ ticket.title|default('') }}" class="mt-1 block w-full rounded-md bg-[#80008051] border-2 border-white focus:border-white focus:ring-white p-2" required/>
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium mb-1">Status</label>
+					<select name="status" class="mt-1 block w-full rounded-md bg-[#80008051] border-2 border-white focus:border-white focus:ring-white p-2" required>
+						<option value="open" {{ ticket.status|default('') == 'open' ? 'selected' : '' }}>Open</option>
+						<option value="in_progress" {{ ticket.status|default('') == 'in_progress' ? 'selected' : '' }}>In Progress</option>
+						<option value="closed" {{ ticket.status|default('') == 'closed' ? 'selected' : '' }}>Closed</option>
+					</select>
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium mb-1">Priority</label>
+					<select name="priority" class="mt-1 block w-full rounded-md bg-[#80008051] border-2 border-white focus:border-white focus:ring-white p-2">
+						<option value="">(none)</option>
+						<option value="low" {{ ticket.priority|default('') == 'low' ? 'selected' : '' }}>Low</option>
+						<option value="medium" {{ ticket.priority|default('') == 'medium' ? 'selected' : '' }}>Medium</option>
+						<option value="high" {{ ticket.priority|default('') == 'high' ? 'selected' : '' }}>High</option>
+					</select>
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium mb-1">Description</label>
+					<textarea name="description" rows="6" class="mt-1 block w-full rounded-md bg-[#80008051] border-2 border-white focus:border-white focus:ring-white p-2">{{ ticket.description|default('') }}</textarea>
+				</div>
+
+				<div class="flex gap-2">
+					<button type="submit" class="px-3 py-2 rounded-md bg-[#800080] text-white">
+						Save
+					</button>
+					<a href="{{ path('tickets_index') }}" class="px-3 py-2 rounded-md border-2 text-white">
+						Cancel
+					</a>
+					{% if ticket is defined %}
+						<form method="post" action="{{ path('tickets_delete', {id: ticket.id}) }}" onsubmit="return confirm('Delete this ticket?');" class="inline">
+							<button type="submit" class="px-4 py-2 rounded-md border-2 border-red-700 text-red-700 ">
+								Delete
+							</button>
+						</form>
+					{% endif %}
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}

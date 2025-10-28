@@ -1,17 +1,110 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1"/>
+		<title>
+			{% block title %}TicketApp
+			{% endblock %}
+		</title>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
-</html>
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+		<!-- Alpine.js -->
+		<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+		{% block head_js %}{% endblock %}
+	</head>
+	<body class="min-h-screen relative flex flex-col items-center" data-turbo-suppress-warning>
+		<div class="background fixed inset-0 -z-10"></div>
+
+		{% include 'partials/nav.html.twig' %}
+
+		<main class="w-full z-20 container-max px-12 flex-1"> {% block body %}{% endblock %}
+			</main>
+
+			{% include 'partials/footer.html.twig' %}
+
+			<!-- TOAST COMPONENT - Prevent Turbo from destroying it -->
+			<div id="toast-container" data-turbo-permanent>
+				{{ include('components/toast.html.twig') }}
+			</div>
+
+			<!-- TOAST TRIGGER SCRIPT -->
+			<script data-turbo-eval="false">
+				(function () {
+let alpineReady = false;
+let toastsToDispatch = [];
+
+// Collect toasts from server
+{% for toast in app.flashes('toast') %}toastsToDispatch.push({{ toast|json_encode|raw }});{% endfor %}
+
+console.log('Toasts to dispatch:', toastsToDispatch.length);
+
+// Listen for Alpine initialization
+document.addEventListener('alpine:init', () => {
+alpineReady = true;
+console.log('Alpine initialized!');
+dispatchAllToasts();
+});
+
+// Fallback: Check if Alpine is already loaded
+setTimeout(() => {
+if (window.Alpine && ! alpineReady) {
+alpineReady = true;
+console.log('Alpine was already ready!');
+dispatchAllToasts();
+}
+}, 200);
+
+function dispatchAllToasts() {
+if (! alpineReady || toastsToDispatch.length === 0) 
+return;
+
+
+console.log(`Dispatching ${
+toastsToDispatch.length
+} toast(s)...`);
+
+toastsToDispatch.forEach((toast, index) => {
+setTimeout(() => {
+console.log('Dispatching toast:', toast);
+window.dispatchEvent(new CustomEvent('show-toast', {detail: toast}));
+}, index * 150); // Stagger multiple toasts
+});
+
+toastsToDispatch = []; // Clear after dispatching
+}
+})();
+			</script>
+
+			<!-- SESSION SYNC -->
+			{% set session_data = app.session.get('ticketapp_session') %}
+			<script>
+				document.addEventListener('DOMContentLoaded', () => {
+try {
+{% if session_data is not null %}
+localStorage.setItem('ticketapp_session', JSON.stringify({
+token: '{{ session_data.token|e('js') }}',
+user: {
+id: '{{ session_data.user.id }}',
+name: '{{ session_data.user.name|e('js') }}',
+email: '{{ session_data.user.email|e('js') }}'
+},
+expiresAt: '{{ session_data.expiresAt }}'
+}));
+{% else %}
+localStorage.removeItem('ticketapp_session');{% endif %}
+} catch (e) {
+console.warn('Session storage failed:', e);
+}
+});
+			</script>
+
+			{% block javascripts %}
+				{{ encore_entry_script_tags('app') }}
+			{% endblock %}
+		</body>
+	</html>

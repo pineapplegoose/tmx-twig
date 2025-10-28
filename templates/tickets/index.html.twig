@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tickets
+{% endblock %}
+
+{% block body %}
+	<div class="py-8">
+		<div class="flex items-center justify-between mb-6">
+			<h2 class="text-2xl text-white font-bold">Tickets</h2>
+			<div>
+				<a href="{{ path('tickets_create_form') }}" class="px-3 py-2.5 bg-[#800080] rounded-md text-white ">
+					New Ticket
+				</a>
+				<a href="/dashboard" class="px-3 py-2 ml-2 rounded-md text-[#800080] bg-[#ffffff4e] border-2 border-[#800080]">Back to Dashboard</a>
+			</div>
+		</div>
+
+		{% if tickets is empty %}
+			<div class="bg-white rounded-lg shadow p-8 text-center">
+				<p class="text-gray-500 mb-4">No tickets found</p>
+				<a href="{{ path('tickets_create_form') }}" class="text-[#800080] hover:underline">
+					Create your first ticket
+				</a>
+			</div>
+		{% else %}
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				{% for t in tickets %}
+					{% include 'partials/ticket_card.html.twig' with {'ticket': t} %}
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}

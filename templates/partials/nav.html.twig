@@ -1,0 +1,31 @@
+<header class="w-full container-max mx-auto px-6 py-4 flex justify-between items-center">
+	<div class="flex items-center gap-4">
+		<a href="/" class="text-xl text-white font-bold">TMX</a>
+		<nav class="hidden md:flex gap-4 text-sm text-slate-100">
+			<a href="/dashboard">Dashboard</a>
+			<a href="/tickets">Tickets</a>
+		</nav>
+	</div>
+	<div>
+		{% if app.session.get('ticketapp_session') %}
+			<span class="hidden md:inline text-sm text-slate-100">Hi,
+				{{ app.session.get('ticketapp_session').user.name }}</span>
+			<a href="/auth/logout" class="px-3 py-2 ml-2 rounded-md text-[#800080] bg-[#ffffff4e] border-2 border-[#800080]">Logout</a>
+			{% else %}
+
+		{% endif %}
+	</div>
+</header>
+
+{% for toast in app.flashes('toast') %}
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+document.dispatchEvent(new CustomEvent('show-toast', {
+detail: {
+message: {{ toast.message|json_encode|raw }},
+type: {{ toast.type|json_encode|raw }}
+}
+}));
+});
+	</script>
+{% endfor %}

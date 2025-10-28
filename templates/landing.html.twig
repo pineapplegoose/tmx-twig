@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block title %}TicketApp - Landing
+{% endblock %}
+{% block body %}
+	<section class="relative overflow-hidden flex flex-col pr-10 lg:py-16 justify-center md:h-[80vh]">
+		<div class="container-max px-6 flex flex-col justify-center  md:flex-row items-center gap-8">
+			<div class="md:w-1/2">
+				<h1 class="text-3xl lg:text-4xl text-white md:text-5xl font-extrabold">TicketApp — Track issues clearly</h1>
+				<p class="mt-4 text-slate-100 max-w-xl">A simple ticket manager for teams & demos. Create, edit, and resolve issues fast.</p>
+				<div class="mt-6 flex gap-3">
+					<a href="/auth/signup" class="px-4 py-2  shadow-sm border border-white text-white rounded-md">Get Started</a>
+					<a href="/auth/login" class="px-4 py-2 text-white bg-[#a64ca6]  rounded-md">Login</a>
+				</div>
+				<div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+					<div class="card p-4">
+						<h4 class="font-semibold">Fast</h4>
+						<p class="text-sm text-slate-600">Create tickets fast.</p>
+					</div>
+					<div class="card p-4">
+						<h4 class="font-semibold">Responsive</h4>
+						<p class="text-sm text-slate-600">Mobile & desktop.</p>
+					</div>
+					<div class="card p-4">
+						<h4 class="font-semibold">Accessible</h4>
+						<p class="text-sm text-slate-600">Semantic HTML.</p>
+					</div>
+				</div>
+			</div>
+			<div class="md:w-1/2 lg:w-[400px] lg:ml-30 relative w-[200px]  hidden md:block">
+				<div class="absolute -top-8 -right-16 w-40 h-40 rounded-full hero-circle"></div>
+				<div class="absolute top-16 right-8 w-24 h-24 rounded-full hero-circle opacity-60"></div>
+				<div class="card p-6">
+					<img src="{{ asset('images/homepageimage.jpg') }}" class='rounded-2xl h-[200px]' alt="Homepage hero image">
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}

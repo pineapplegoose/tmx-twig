@@ -6,15 +6,25 @@
 parameters:
 
 services:
-    # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autowire: true
+        autoconfigure: true
+        bind:
+            Symfony\Component\HttpFoundation\Session\SessionInterface: "@session"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/'
+        resource: "../src/"
+
+        # config/services.yaml
+
+    App\Controller\ErrorController:
+        tags: ["controller.service_arguments"]
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\DatabaseService:
+        arguments:
+            $projectDir: "%kernel.project_dir%"

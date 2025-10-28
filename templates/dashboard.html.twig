@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% block title %}Dashboard
+{% endblock %}
+{% block body %}
+	<div class="py-8">
+		<div class="flex items-center justify-between mb-6">
+			<h2 class="text-2xl text-white font-bold">Dashboard</h2>
+			<div>
+				<a href="{{ path('tickets_create_form') }}" class="px-3 py-2.5 bg-[#800080] rounded-md text-white ">New Ticket</a>
+				<a href="/tickets" class="px-3 py-2 ml-2 rounded-md text-[#800080] bg-[#ffffff4e] border-2 border-[#800080]">Manage Tickets</a>
+			</div>
+		</div>
+		<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+			<div class="card p-4 pb-10 lg:pb-20">
+				<h4 class="text-sm text-slate-500">Total tickets</h4>
+				<div class="text-2xl font-semibold">{{ total }}</div>
+			</div>
+			<div class="card p-4 pb-10 lg:pb-20">
+				<h4 class="text-sm text-slate-500">Open</h4>
+				<div class="text-2xl font-semibold text-green-600">{{ open }}</div>
+			</div>
+			<div class="card p-4 pb-10 lg:pb-20">
+				<h4 class="text-sm text-slate-500">Closed</h4>
+				<div class="text-2xl font-semibold text-slate-600">{{ closed }}</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
