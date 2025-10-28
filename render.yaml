@@ -1,0 +1,12 @@
+# render.yaml
+services:
+    - type: web
+      name: tmx-twig
+      env: docker
+      dockerfilePath: ./Dockerfile
+      plan: free
+      healthCheckPath: /
+      envVars:
+          APP_ENV: prod
+          APP_DEBUG: "0"
+          DATABASE_URL: ${DATABASE_URL}
