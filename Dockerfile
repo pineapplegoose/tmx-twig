@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y nginx supervisor
 COPY nginx.conf /etc/nginx/sites-available/default
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-EXPOSE 10000  # ← ADD THIS
+EXPOSE 10000  
 
 
 CMD ["/usr/bin/supervisord"]
