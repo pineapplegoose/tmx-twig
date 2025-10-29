@@ -1,6 +1,7 @@
 server {
     listen ${PORT};
     server_name _;
+
     root /var/www/html/public;
     index index.php;
 
@@ -9,6 +10,7 @@ server {
     }
 
     location ~ \.php$ {
+        # PHP-FPM via TCP on localhost (we configure PHP-FPM to listen on 127.0.0.1:9000)
         fastcgi_pass 127.0.0.1:9000;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -16,7 +18,11 @@ server {
         include fastcgi_params;
     }
 
+    # deny hidden files
     location ~ /\. {
         deny all;
     }
+
+    # increase fastcgi timeout for long requests
+    fastcgi_read_timeout 300;
 }
