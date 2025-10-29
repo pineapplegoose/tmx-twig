@@ -25,7 +25,9 @@ RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Install deps
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Install deps
+RUN composer install --no-dev --optimize-autoloader --no-interaction \
+    --no-cache
 
 # Permissions
 RUN chown -R www-data:www-data /var/www/html \
