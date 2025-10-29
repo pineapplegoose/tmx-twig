@@ -45,7 +45,7 @@
         "symfony/web-link": "7.3.*",
         "symfony/webpack-encore-bundle": "^2.3",
         "symfony/yaml": "7.3.*",
-        "twig/extra-bundle": "*",
+        "twig/extra-bundle": "^3.0*",
         "twig/twig": "^2.12|^3.0"
     },
     "config": {
