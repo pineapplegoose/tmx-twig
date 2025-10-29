@@ -48,5 +48,10 @@ RUN chown -R www-data:www-data /var/www/html \
 # Expose a port (documentary only; Render will set PORT env variable)
 EXPOSE 10000
 
+RUN php bin/console cache:clear --env=prod --no-debug && php bin/console cache:warmup --env=prod --no-debug
+
+RUN chmod -R 775 var/cache var/log && chown -R www-data:www-data var/cache var/log
+
+
 # Start supervisor (supervisor will run a command to envsubst nginx template before launching nginx)
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
