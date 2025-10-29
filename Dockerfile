@@ -52,10 +52,12 @@ RUN php bin/console cache:clear --env=prod --no-debug || true \
     && php bin/console assets:install public --env=prod || true
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html \
+# Create var directories if they don't exist
+RUN mkdir -p var/cache var/log \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 var/cache var/log \
     && find var -type d -exec chmod 775 {} \; \
-    && find var -type f -exec chmod 664 {} \;
+    && find var -type f -exec chmod 664 {} \; || true
 
 EXPOSE 10000
 
