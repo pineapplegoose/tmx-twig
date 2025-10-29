@@ -1,34 +1,35 @@
-# Start from official PHP image
 FROM php:8.2-fpm
 
-# Install system dependencies and PHP extensions
+# Install deps
 RUN apt-get update && apt-get install -y \
-    nginx supervisor git curl libpng-dev libonig-dev libxml2-dev zip unzip libzip-dev \
+    git curl libpng-dev libonig-dev libxml2-dev zip unzip libzip-dev \
+    nginx supervisor \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-# Install Composer globally (from official Composer image)
+# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
+# Working directory
 WORKDIR /var/www/html
 
-# Copy project files
+# Copy app
 COPY . .
 
-# Copy Nginx and Supervisor configs
+# Copy configs
 COPY nginx.conf /etc/nginx/sites-available/default
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Install PHP dependencies (prod only, skip dev packages and scripts)
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+# Install deps
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Set proper permissions
-RUN chown -R www-data:www-data /var/www/html
+# Permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
-# Expose port (you can change 10000 to 80 or any port your host uses)
-EXPOSE 10000
-
-# Start Supervisor (handles PHP-FPM + Nginx)
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Start
+CMD ["/usr/bin/supervisord"]
